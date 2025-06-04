@@ -6,6 +6,7 @@ use App\Http\Requests\LogUserRequest;
 use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterUser;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 
 class UserController
@@ -51,12 +52,24 @@ class UserController
               //  on creer un token pour l'utilisateur pour les futures requetes
                 $token = $user->createToken("MA_CLEE_SECRETE_VISIBLE_AU_BACKEND")->plainTextToken;
              
+                $redirect = $user->profil === 'admin'
+                ? '/admin/dashboard'
+                : '/user/dashboard';
+
+                // Si profil = user, on récupère la sucursalle liée par la clé
+            $sucursalle = null;
+            if($user->profil === 'user') {
+                $sucursalle = \App\Models\Sucursalle::where('key', $user->key)->first();
+            }
+
                 return response()->json([
                        
                         "status_code" => "200",
                         "status_message" => "Utilisateur connecté.",
                         "user"=> $user,
-                        "token" => $token
+                        "token" => $token,
+                        "redirect"=> $redirect,
+                         "sucursalle" => $sucursalle // null si admin, objet si user
                         ],200);
 
                          
@@ -78,9 +91,10 @@ class UserController
 
 
 
-public function Edit(UserRequest $request, $id){
+public function update(UpdateUserRequest $request, $id){
  
-    $user = new User();
+    $user = new User()::find($id);
+    
     $user->name = request('name');
      $user->email = request('email');
      $user->profil = request('profil');
@@ -88,7 +102,7 @@ public function Edit(UserRequest $request, $id){
      $user->phone = request('phone');
      $user->password = bcrypt($request->password) ;
 
-     if($user->user_id === auth()->user()->id) {
+     if($user->user_id === auth()->user()->user_id) {
 
          $user->save();
      return response()->json([
@@ -98,9 +112,32 @@ public function Edit(UserRequest $request, $id){
 
      } else {
  return response()->json([
-        'message'=> 'vous n etes pas l auteur de ce post',
+        'message'=> 'vous ne ne pouvez pas effectuer ces modifications',
          ]);
      }
 }
+
+public function delete($id)    {
+       try {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Utilisateur non trouvé',
+            ], 404);
+        }
+        $user->delete();
+        return response()->json([
+            'status_code'=> 200,
+            'message'=> 'Utilisateur supprimé avec succès',
+            'data' => $user,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
    
+      
+    }
 }
