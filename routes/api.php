@@ -29,7 +29,7 @@ Route::post('/login', [UserController::class,'login']);
 Route::middleware('auth:sanctum')->group( function ()
 {
    
-
+Route::put('/user/edit/{id}', [UserController::class,'Edit']);
 
  Route::get('/user', function(Request $request){
     return $request->user();

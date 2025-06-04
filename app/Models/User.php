@@ -29,6 +29,11 @@ class User extends Authenticatable
         'password'
         
     ];
+   
+protected
+ $primaryKey = 'user_id';
+ public $incrementing = true;
+protected $keyType = 'int';
 
     /**
      * The attributes that should be hidden for serialization.
