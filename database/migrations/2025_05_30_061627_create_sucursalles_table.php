@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sucursalles', function (Blueprint $table) {
-            $table->id('sucursalle_id')->primary();
+            $table->id('sucursalle_id');
             $table->string('name');
             $table->string('adresse');
             $table->string('ville');
@@ -21,10 +21,8 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email')->unique();
             $table->string('statut');
-            $table->string('key');
-
-             $table->foreignId('user_id')->nullable()->constrained('users', 'user_id');
             $table->timestamps();
+           
         });
     }
 

@@ -2,4 +2,4 @@ create a request: use to give rules or valided pages's conditions-->  php artisa
 
 pour gerer le login en api et le token, se rassurer de creer la table personal_acess_token 
 
-la proprieter key dans ka table user et sucursalle permet d'importer les donnees specifique de chaque sucursalle lors de la connection de l'user
+      php artisan migrate --path=database/migrations/2025_05_30_070637_create_entreprises_table.php     

@@ -31,7 +31,7 @@ class createSucursalleRequest extends FormRequest
             'phone'=> 'required',
             'pays'=> 'required',
             
-            'key'=> 'required',
+            
         ];
     }
 
@@ -55,7 +55,7 @@ class createSucursalleRequest extends FormRequest
             'adresse.required' => 'L\'adresse est requise.',
              'pays.required' => 'Le pays ou se situe l\'entreprise est requis.',
             'phone.required' => 'Le numéro de téléphone de l\'entreprise est requis.',
-            'key.required'=> 'la clé correspondant a un user est requise',
+     
             
         ];
     }

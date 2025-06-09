@@ -13,9 +13,12 @@ class sucursalle extends Model
         'pays',
         'phone',
         'email',
-        'statut',
-        'key',
-        'user_id',
+        'statut'
         
     ];
+
+    protected
+ $primaryKey = 'sucursalle_id';
+ public $incrementing = true;
+protected $keyType = 'int';
 }

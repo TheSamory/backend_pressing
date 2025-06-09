@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class admin extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
    // use HasFactory, Notifiable;
@@ -25,13 +25,13 @@ class User extends Authenticatable
         'profil',
         'adresse',
         'phone',
-        'password',
-        'sucursalle_id',
+        'key',
+        'password'
         
     ];
    
 protected
- $primaryKey = 'user_id';
+ $primaryKey = 'admin_id';
  public $incrementing = true;
 protected $keyType = 'int';
 

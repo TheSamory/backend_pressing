@@ -5,12 +5,26 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\createSucursalleRequest;
 use Illuminate\Http\Request;
 use App\Models\Sucursalle;
+use App\Models\admin;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class SucursalleController
 {
     public function register(createSucursalleRequest $request)
     {
+          $accessToken = request()->bearerToken();
+        $token = PersonalAccessToken::findToken($accessToken);
+
+        // Récupère l'admin lié à ce token
+        $admin = null;
+        if ($token && $token->tokenable_type === admin::class) {
+            $admin = admin::find($token->tokenable_id);
+        }
         try {
+
+
+    if ($admin) {
+            
         $sucursalle = new Sucursalle();
 
         $sucursalle->name = $request->name;
@@ -20,8 +34,7 @@ class SucursalleController
         $sucursalle->ville = $request->pays;
         $sucursalle->pays = $request->pays;
         $sucursalle->statut = $request->statut;
-        $sucursalle->key = $request->key;
-        $sucursalle->user_id = auth()->user()->user_id;
+    
 
         $sucursalle->save();
 
@@ -31,10 +44,11 @@ class SucursalleController
         'sucursalle'=> $sucursalle
       
        ]);
-
+    }
         }catch(\Exception $e){
             return response()->json([
-                "error"=> $e->getMessage()
+                "error"=> $e->getMessage(),
+                "message"=> "echec"
                 ],401);
         }
 

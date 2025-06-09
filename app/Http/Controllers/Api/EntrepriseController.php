@@ -5,12 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\createEntrepriseRequest;
 use Illuminate\Http\Request;
 use App\Models\Entreprise;
+use App\Models\admin;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class EntrepriseController
 {
     public function register(createEntrepriseRequest $request)
     {
+          //recuperer id de l'admin connecter
+        $accessToken = request()->bearerToken();
+        $token = PersonalAccessToken::findToken($accessToken);
+        $admin = null;
+        if ($token && $token->tokenable_type === admin::class) {
+            $admin = admin::find($token->tokenable_id);
+        }
+
           try{
+            if ($admin) {
 
         $entreprise = new Entreprise();
 
@@ -29,8 +40,8 @@ class EntrepriseController
          $entreprise->description = $request->description;
          $entreprise->rccm = $request->rccm;
          $entreprise->niu = $request->niu;
-         $entreprise->user_id = auth()->user()->user_id;
-        
+
+        $entreprise->admin_id = $admin->admin_id; 
         $entreprise->save();
 
          return response()->json([
@@ -39,7 +50,7 @@ class EntrepriseController
         'entreprise'=> $entreprise
       
        ]);
-
+            }
         }catch(\Exception $e){
             return response()->json([
                 "error"=> $e->getMessage()

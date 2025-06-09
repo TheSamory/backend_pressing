@@ -24,10 +24,22 @@ class LogUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=> 'required|email|exists:users,email',
+            'email'=> 'required|email',
             'password'=> 'required',
         ];
     }
+
+        public function withValidator($validator)
+{
+    $validator->after(function ($validator) {
+        $email = $this->input('email');
+        $existsInUsers = \App\Models\User::where('email', $email)->exists();
+        $existsInAdmins = \App\Models\Admin::where('email', $email)->exists();
+        if (!$existsInUsers && !$existsInAdmins) {
+            $validator->errors()->add('email', 'Cette adresse mail n existe pas dans users ou admins.');
+        }
+    });
+}
 
       public function failedValidation(Validator $validator)
     {

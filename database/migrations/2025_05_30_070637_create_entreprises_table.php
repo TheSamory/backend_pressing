@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('rccm')->nullable();
             $table->string('niu')->nullable();
 
-            $table->foreignId('user_id')->nullable()->constrained('users', 'user_id');
+            $table->foreignId('admin_id')->nullable()->constrained('admins', 'admin_id');
             $table->timestamps();
         });
     }

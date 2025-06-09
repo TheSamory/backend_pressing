@@ -22,7 +22,7 @@ class entreprise extends Model
         'description',
         'rccm',
         'niu',
-        'user_id',
+        'admin_id',
         
     ];
 }

@@ -11,31 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id')->primary();
+        Schema::create('admins', function (Blueprint $table) {
+            $table->id('admin_id')->primary();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('profil');
             $table->string('adresse');
             $table->string('phone');
             $table->string('password');
-         
 
-           $table->foreignId('sucursalle_id')->nullable()->constrained('sucursalles', 'sucursalle_id');
-    
-//$table->unsignedBigInteger('sucursalle_id');
-//$table->foreign('sucursalle_id')->references('sucursalle_id')->on('sucursalles')->nullOnDelete();
+            $table->rememberToken();
             $table->timestamps();
-              $table->rememberToken();
         });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
+             Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
-
-        
     }
 
     /**
@@ -43,8 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('admins');
     }
 };

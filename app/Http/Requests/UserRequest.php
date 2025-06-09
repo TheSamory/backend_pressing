@@ -25,13 +25,25 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email'=> 'required|unique:users,email',
+            'email'=> 'required|email',
             'profil' => 'required',
             'adresse' => 'required',
             'phone'=> 'required',
             'password'=> 'required',
         ];
     }
+
+    public function withValidator($validator)
+{
+    $validator->after(function ($validator) {
+        $email = $this->input('email');
+        $existsInUsers = \App\Models\User::where('email', $email)->exists();
+        $existsInAdmins = \App\Models\Admin::where('email', $email)->exists();
+        if ($existsInUsers || $existsInAdmins) {
+            $validator->errors()->add('email', 'Cette adresse mail existe déjà dans users ou admins.');
+        }
+    });
+}
 
      public function failedValidation(Validator $validator)
     {
